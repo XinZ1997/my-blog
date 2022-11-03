@@ -1,36 +1,36 @@
-import { useState, useEffect } from "react";
-import "./App.css";
-import importExcel from "./import-excel";
+import { React, useState, useEffect } from 'react';
+import './App.css';
+import importExcel from './import-excel';
 
-const PRODUCT_NAME = "商品名称";
-const BUSINESS_TYPE = "交易类型";
+const PRODUCT_NAME = '商品名称';
+const BUSINESS_TYPE = '交易类型';
 const enumBusinessType = {
-  enter: "结算入账",
-  refund: "退款",
+  enter: '结算入账',
+  refund: '退款',
 };
 
 function App() {
   const [pres, setPres] = useState([]);
   const importExcelCallback = (data) => {
-    let map = new Map();
+    const map = new Map();
     data
       .filter((item) => item[PRODUCT_NAME])
       .map((item) => {
         map.set(item[PRODUCT_NAME], { ...item, enterCount: 0, refundCount: 0 });
         return item;
       })
-      .map((item) => {
+      .forEach((item) => {
         if (item[BUSINESS_TYPE] === enumBusinessType.enter) {
-          map.get(item[PRODUCT_NAME]).enterCount++;
+          map.get(item[PRODUCT_NAME]).enterCount += 1;
         }
         if (item[BUSINESS_TYPE] === enumBusinessType.refund) {
-          map.get(item[PRODUCT_NAME]).refundCount++;
+          map.get(item[PRODUCT_NAME]).refundCount += 1;
         }
       });
-    let arr = [];
-    for (let item of map.values()) {
+    const arr = [];
+    map.forEach((item) => {
       arr.push(
-        <div className="container">
+        <div className="container" key={item[PRODUCT_NAME]}>
           <p className="name">{item[PRODUCT_NAME]}</p>
           <p className="enter">
             <span>{item.enterCount}</span>
@@ -38,9 +38,9 @@ function App() {
           <p className="refund">
             <span>{item.refundCount}</span>
           </p>
-        </div>
+        </div>,
       );
-    }
+    });
     setPres(arr);
   };
   useEffect(() => {}, []);

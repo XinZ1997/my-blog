@@ -1,4 +1,4 @@
-import { read, utils } from "xlsx";
+import { read, utils } from 'xlsx';
 
 export default function importExcel(file, cb) {
   // 获取上传的文件对象
@@ -9,21 +9,18 @@ export default function importExcel(file, cb) {
     try {
       const { result } = event.target;
       // 以二进制流方式读取得到整份excel表格对象
-      const workbook = read(result, { type: "binary" });
+      const workbook = read(result, { type: 'binary' });
       let data = []; // 存储获取到的数据
       // 遍历每张工作表进行读取（这里默认只读取第一张表）
-      for (const sheet in workbook.Sheets) {
-        if (workbook.Sheets.hasOwnProperty(sheet)) {
+      Object.keys(workbook.Sheets).forEach((sheet) => {
+        if (Object.prototype.hasOwnProperty.call(workbook.Sheets, sheet)) {
           // 利用 sheet_to_json 方法将 excel 转成 json 数据
           data = data.concat(utils.sheet_to_json(workbook.Sheets[sheet]));
-          break; // 如果只取第一张表，就取消注释这行
         }
-      }
+      });
       cb(data);
     } catch (e) {
       // 这里可以抛出文件类型错误不正确的相关提示
-      console.log("文件类型不正确");
-      return;
     }
   };
   // 以二进制方式打开文件
