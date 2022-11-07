@@ -1,0 +1,17 @@
+.list-header, .list-body {
+  display: flex;
+  text-align: center;
+}
+
+.name {
+  flex: 1 1 80%;
+  text-align: left;
+}
+
+.enter {
+ flex: 1 1 10%;
+}
+
+.refund {
+ flex: 1 1 10%;
+}
